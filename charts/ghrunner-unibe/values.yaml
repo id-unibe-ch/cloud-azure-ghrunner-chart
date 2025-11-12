@@ -1,0 +1,60 @@
+# Default values for ghrunner-unibe.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+secretManagement:
+  pod:
+    name: "secret-pod"
+    image: "busybox:1"
+    command: ["/bin/sleep", "infinity"]
+    replicas: 1
+    labels: {}
+    annotations: {}
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: "0.1"
+        memory: "64Mi"
+      requests:
+        cpu: "0.1"
+        memory: "32Mi"
+    livenessProbe:
+      exec:
+        command:
+          - ls
+          - /mnt/secrets-store
+      initialDelaySeconds: 5
+      periodSeconds: 5
+    readinessProbe:
+      exec:
+        command:
+          - ls
+          - /mnt/secrets-store
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+  serviceAccountName: "workloadName"
+  secretProviderClassName: "azure-keyvault-secrets-provider"
+  tenantId: ""
+  clientId: ""
+
+  keyVault:
+    name: "keyVault"
+    objects: {}
+      # - name: "ghrunner-secret"
+      #   value: "github_app_id"
+
+github:
+  githubConfigUrl: ""
+  githubConfigSecret: "gha-runner-scale-set-secret"
+  runnerScaleSetName: ""
+
+  minRunners: 0
+  maxRunners: 10
+
+  controllerServiceAccount:
+    namespace: arc-system
+    name: arc-gha-rs-controller

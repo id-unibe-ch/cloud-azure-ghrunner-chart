@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ghrunner-unibe.podName" . }}
+  labels:
+    {{- include "ghrunner-unibe.podLabels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.secretManagement.pod.replicas }}
+  selector:
+    matchLabels:
+      {{- include "ghrunner-unibe.podSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.secretManagement.pod.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ghrunner-unibe.podLabels" . | nindent 8 }}
+        {{- with .Values.secretManagement.pod.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.secretManagement.pod.image }}"
+          imagePullPolicy: {{ .Values.secretManagement.pod.imagePullPolicy }}
+          {{- with .Values.secretManagement.pod.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command: {{ toJson .Values.secretManagement.pod.command }}
+
+          {{- with .Values.secretManagement.pod.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.secretManagement.pod.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: secrets-store01-inline
+              mountPath: /mnt/secrets-store
+              readOnly: true
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "{{ include "ghrunner-unibe.secretProviderClassName" . }}"
+
+      
