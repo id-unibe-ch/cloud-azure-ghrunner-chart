@@ -9,8 +9,8 @@ secretManagement:
   pod:
     name: "secret-pod"
     image: "busybox:1"
-    command: ["/bin/sh", "-c", "trap : TERM INT; while sleep 1 \u0026 wait $!; do :;   
-       ↪ done"]
+    command: ["/bin/sh"]
+    args: [ "-c", "trap : TERM INT; while sleep 1 \u0026 wait $!; do :; done"]
     replicas: 1
     labels: {}
     annotations: {}
