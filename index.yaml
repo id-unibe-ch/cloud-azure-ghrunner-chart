@@ -3,6 +3,21 @@ entries:
   ghrunner-unibe:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-01-13T13:48:38.83856371Z"
+    dependencies:
+    - alias: github
+      name: gha-runner-scale-set
+      repository: oci://ghcr.io/actions/actions-runner-controller-charts
+      version: 0.13.1
+    description: A Helm chart for Kubernetes
+    digest: 7bce6ba39e7420efe0ce3a9fa1c691e80933503e3bbfe04f28368c7133d3d62a
+    name: ghrunner-unibe
+    type: application
+    urls:
+    - https://github.com/id-unibe-ch/cloud-azure-ghrunner-chart/releases/download/ghrunner-unibe-0.1.5/ghrunner-unibe-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2026-01-13T13:01:55.686708105Z"
     dependencies:
     - alias: github
@@ -76,4 +91,4 @@ entries:
     urls:
     - https://github.com/id-unibe-ch/cloud-azure-ghrunner-chart/releases/download/ghrunner-unibe-0.1.0/ghrunner-unibe-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-13T13:01:55.686728025Z"
+generated: "2026-01-13T13:48:38.838587134Z"
